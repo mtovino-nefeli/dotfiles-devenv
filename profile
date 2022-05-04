@@ -28,7 +28,7 @@ if [ -d "$HOME/.local/bin" ] ; then
     PATH="$HOME/.local/bin:$PATH"
 fi
 
-source /usr/share/bash-completion/completions/git
+source /usr/share/bash-completion/bash-completion
 
 alias ls='ls --color=auto'
 alias egrep='egrep --color=auto'
