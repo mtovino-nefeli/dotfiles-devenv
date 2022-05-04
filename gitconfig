@@ -1,0 +1,92 @@
+[user]
+	name = Mike Tovino
+	email = mtovino@nefeli.io
+[core]
+	editor = nano
+	pager = less
+	excludesfile = /Users/mtovino/.gitignore_global
+[fetch]
+	prune = true
+[pull]
+	rebase = true
+[push]
+	default = simple
+[commit]
+	template = ~/.gitmessage.tmp
+[alias]
+	# Self-documenting
+	amend = commit --amend
+	conflict = diff --name-only --diff-filter=U
+	continue = !vim `git diff --name-only`
+	fixup = commit --fixup
+	last = !git --no-pager log -1 --oneline --abbrev-commit
+	rba = rebase --abort
+	rbc = rebase --continue
+	rbm = rebase -X patience master
+	rbmi = rebase -X patience -i master
+	rbmia = rebase -X patience -i master --autosquash
+	staged = diff --cached
+	untracked = ls-files --others --exclude-standard
+	br = rev-parse --abbrev-ref HEAD
+
+	# Add all tracked files and display status.
+	au = !git add -u && git status
+
+	# Add all tracked files and start a commit.
+	ac = !git add -u && git commit
+
+	# Rebase onto master, executing the command after each commit.
+	exec = "!__exec() { [ $# -ge 1 ] && git rbmi --exec \"$*\"; };__exec"
+
+	# List all the commits, title only.
+	list = log --oneline --abbrev-commit
+
+	# Un-stage everything in the last commit, used to split one commit into multiple.
+	split = reset HEAD~
+
+	# Open all the files of the given commit. Omitting the commit ref is equivalent to HEAD
+	edit = "!__edit() { vim `git show --name-only --pretty=oneline $1 | tail -n +2`; };__edit"
+
+	# Merge, push and delete the branch given as $1. Assumes you are on updated master.
+	mergepr = "!__mergepr() { git merge --ff-only $1 && git push upstream master && git branch -d $1 && git push origin --delete $1; };__mergepr"
+
+	# Interactive rebase the last $1 commits.
+	rbn = "!__rbn(){ [ $# -eq 1 ] && git rebase -X patience -i HEAD~$1; };__rbn"
+
+	# Open all files with merge conflicts in separate vim buffers.
+	resolve = "!__resolve() { vim `git diff --name-only | uniq`; };__resolve"
+
+	# Re-use the commit message of the previous HEAD. Useful for splitting a commit
+
+	# but retaining its info in one of the new commits.
+	reuse = commit -C HEAD@{1}
+
+	# View patches since master in reverse chronological order.
+	review = log --reverse -p --perl-regexp --invert-grep --grep='vendor:.+' master..
+
+	# View patches since master in reverse chronological order.
+
+	# Note: requires git installed with pcre
+	review-pr = "!__revpr(){ [ $# -eq 2 ] && (git fetch $1 || echo Failed to update remote $1) && git checkout $1/$2 && git review; };__revpr"
+
+	# Rename the branch named $1 to $2, delete the remote copy of $1 and push to $2.
+	mvb = "!__mvb(){ [ $# -eq 2 ] && git branch -m $1 $2 && git push origin :$1 && git push --set-upstream origin $2; };__mvb"
+
+	# Show all commits that touch the given file
+	follow = "!__follow(){ [ $# -eq 1 ] && git log --follow $1; };__follow"
+	review-all = diff --perl-regexp --invert-grep --grep='vendor:.+' -M master...
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+[difftool "sourcetree"]
+	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+	path = 
+[mergetool "sourcetree"]
+	cmd = /Applications/Sourcetree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+	trustExitCode = true
+[url "ssh://git@github.com/"]
+	insteadOf = https://github.com/
+[submodule]
+	#recurse = true
