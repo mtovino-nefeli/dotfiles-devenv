@@ -88,5 +88,7 @@
 	trustExitCode = true
 [url "ssh://git@github.com/"]
 	insteadOf = https://github.com/
+[url "ssh://git@gitlab.com/"]
+  insteadof = https://gitlab.com/
 [submodule]
 	#recurse = true
