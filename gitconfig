@@ -27,19 +27,12 @@
 	rbmia = rebase -X patience -i master --autosquash
 	staged = diff --cached
 	untracked = ls-files --others --exclude-standard
-	br = rev-parse --abbrev-ref HEAD
-
-	# Add all tracked files and display status.
-	au = !git add -u && git status
-
-	# Add all tracked files and start a commit.
-	ac = !git add -u && git commit
 
 	# Rebase onto master, executing the command after each commit.
 	exec = "!__exec() { [ $# -ge 1 ] && git rbmi --exec \"$*\"; };__exec"
 
 	# List all the commits, title only.
-	list = log --oneline --abbrev-commit
+	list = log --oneline origin/main^..  --no-abbrev-commit
 
 	# Un-stage everything in the last commit, used to split one commit into multiple.
 	split = reset HEAD~
@@ -89,6 +82,6 @@
 [url "ssh://git@github.com/"]
 	insteadOf = https://github.com/
 [url "ssh://git@gitlab.com/"]
-  insteadof = https://gitlab.com/
+	insteadof = https://gitlab.com/
 [submodule]
 	#recurse = true
